@@ -90,5 +90,12 @@ function playRound (humanChoice){
         }else{
             endResultDiv.textContent = "Better luck next time.";
         }
+        buttons.forEach(button => {
+            button.disabled = true;
+        });
+        const playAgainBtn = document.createElement("button");
+        playAgainBtn.textContent = "Click here to play again"
+        body.appendChild(playAgainBtn);
+        playAgainBtn.addEventListener("click", () => {window.location.reload()});
     }
 }
