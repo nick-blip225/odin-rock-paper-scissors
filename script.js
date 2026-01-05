@@ -1,21 +1,35 @@
-console.log("Hello World");
-
 let humanScore = 0;
 let computerScore = 0;
 
-function getComputerChoice (){
-    let randomNumber = Math.random() * 3;
+const body = document.querySelector("body");
+const rockBtn = document.createElement("button");
+const paperBtn = document.createElement("button");
+const scissorsBtn = document.createElement("button");
+const roundResultDiv = document.createElement("div");
+const computerChoiceDiv = document.createElement("div");
+const scoreDiv = document.createElement("div");
+const endResultDiv = document.createElement("p");
 
-    if (randomNumber <= 1) {
-        return "Rock";        
-    }else if (randomNumber <= 2){
-        return "Paper";
-    }else {
-        return "Scissors"
-    }
-}
+body.append(rockBtn, paperBtn, scissorsBtn, computerChoiceDiv, roundResultDiv, 
+    scoreDiv, endResultDiv);
 
-function getHumanChoice(){
+rockBtn.textContent = "Rock";
+paperBtn.textContent = "Paper";
+scissorsBtn.textContent = "Scissors";
+
+rockBtn.setAttribute("data-answer", "Rock");
+paperBtn.setAttribute("data-answer", "Paper");
+scissorsBtn.setAttribute("data-answer", "Scissors");
+
+const buttons = document.querySelectorAll("button");
+
+buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+        playRound(button.dataset.answer);
+    })
+});
+
+/*function getHumanChoice(){
     answer = parseInt(prompt("Press 1 for Rock, 2 for Paper, or 3 for Scissors "));
 
     if (answer == 1) {
@@ -27,76 +41,54 @@ function getHumanChoice(){
     }else {
         return "Invalid answer";
     }
-}
+}*/
 
-function playRound (humanChoice, computerChoice){
+function playRound (humanChoice){
+    function getComputerChoice (){
+        let randomNumber = Math.random() * 3;
+
+        if (randomNumber <= 1) {
+            return "Rock";        
+        }else if (randomNumber <= 2){
+            return "Paper";
+        }else {
+            return "Scissors"
+        }
+    }
+
+    let computerChoice = getComputerChoice();
+
+
     if(humanChoice == computerChoice){
-        console.log("It was a draw!");
-        //choiceDiv.textContent = "It was a draw!";
+        roundResultDiv.textContent = "It was a draw!";
     }else if(humanChoice == "Rock" && computerChoice == "Paper"){
-        console.log("Loss.  Paper covers rock.");
-        //choiceDiv.textContent = "Loss.  Paper covers rock.";
+        roundResultDiv.textContent = "Loss.  Paper covers rock.";
         computerScore++;
     }else if(humanChoice == "Rock" && computerChoice == "Scissors"){
-        console.log("You win!  Rock breaks scissors.");
-        //choiceDiv.textContent = "You win!  Rock breaks scissors.";
+        roundResultDiv.textContent = "You win!  Rock breaks scissors.";
         humanScore++;
     }else if(humanChoice == "Paper" && computerChoice == "Rock"){
-        console.log("You win!  Paper covers rock.");
-        //choiceDiv.textContent = "You win!  Paper covers rock.";
+        roundResultDiv.textContent = "You win!  Paper covers rock.";
         humanScore++;
     }else if(humanChoice == "Paper" && computerChoice == "Scissors"){
-        console.log("Loss.  Scissors cut paper.");
-        //choiceDiv.textContent = "Loss.  Scissors cut paper.";
+        roundResultDiv.textContent = "Loss.  Scissors cut paper.";
         computerScore++;
     }else if(humanChoice == "Scissors" && computerChoice == "Rock"){
-        console.log("Loss.  Rock breaks scissors.");
-        //choiceDiv.textContent = "Loss.  Rock breaks scissors.";
+        roundResultDiv.textContent = "Loss.  Rock breaks scissors.";
         computerScore++;
     }else if(humanChoice == "Scissors" && computerChoice == "Paper"){
-        console.log("You win!  Scissors cut paper.");
-        //choiceDiv.textContent = "You win!  Scissors cut paper.";
+        roundResultDiv.textContent = "You win!  Scissors cut paper.";
         humanScore++;
     }
-}
 
-function playGame(){
-    humanScore = 0;
-    computerScore = 0;
+    computerChoiceDiv.textContent = `The computer chose ${computerChoice}`;
+    scoreDiv.textContent = `Your score: ${humanScore} \nComputer score: ${computerScore}`;
 
-    const body = document.querySelector("body");
-    const rockBtn = document.createElement("button");
-    const paperBtn = document.createElement("button");
-    const scissorsBtn = document.createElement("button");
-    const choiceDiv = document.createElement("div");
-    const scoreDiv = document.createElement("div");
-    const resultDiv = document.createElement("p");
-
-    body.append(rockBtn, paperBtn, scissorsBtn, choiceDiv, scoreDiv, resultDiv);
-
-    rockBtn.textContent = "Rock";
-    paperBtn.textContent = "Paper";
-    scissorsBtn.textContent = "Scissors";
-
-    rockBtn.addEventListener("click", playRound("Rock", getComputerChoice()));
-
-    while (humanScore < 5 && computerScore < 5) {
-
-        playRound(getHumanChoice(), getComputerChoice());
-
-        console.log(`The computer chose  + ${getComputerChoice()}`);
-        console.log("Your score: " + humanScore + "\nComputer score: " + computerScore);
-        scoreDiv.textContent = `Your score: ${humanScore}
-                                Computer score: ${computerScore}`
-    }
-
-    if (humanScore > computerScore) {
-        console.log("You win!");
-        resultDiv.textContent = "You win!";
-    }else{
-        console.log("Better luck next time.")
-        resultDiv.textContent = "Better luck next time.";
+    if (humanScore >= 5 || computerScore >= 5) {
+        if (humanScore > computerScore) {
+            endResultDiv.textContent = "You win!";
+        }else{
+            endResultDiv.textContent = "Better luck next time.";
+        }
     }
 }
-
-playGame();
